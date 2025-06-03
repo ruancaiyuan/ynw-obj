@@ -81,7 +81,7 @@ loadCachedRequests().catch(console.error);
 
 // 配置 CORS
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://192.168.1.13:5173'],
+  origin: ['http://localhost:5173', 'http://192.168.1.17:5173'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
   credentials: true
