@@ -2,7 +2,6 @@ import { createBrowserRouter, useLocation } from 'react-router-dom';
 import React from 'react';
 import { MainTab } from './tabs/MainTab';
 import { DecryptPage } from './pages/DecryptPage';
-import { HistoryPage } from './pages/HistoryPage';
 import { RemoveVocalsPage } from './pages/RemoveVocalsPage';
 import { accessLogger } from './util/accessLogger';
 
@@ -29,14 +28,6 @@ export const router = createBrowserRouter([
     element: (
       <RouteLogger>
         <DecryptPage />
-      </RouteLogger>
-    ),
-  },
-  {
-    path: '/history',
-    element: (
-      <RouteLogger>
-        <HistoryPage />
       </RouteLogger>
     ),
   },

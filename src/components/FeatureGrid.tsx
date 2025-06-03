@@ -1,6 +1,6 @@
 import { Box, SimpleGrid, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import { MdHistory, MdMusicNote, MdAudioFile } from 'react-icons/md';
+import { MdMusicNote, MdAudioFile } from 'react-icons/md';
 import { Icon } from '@chakra-ui/react';
 
 interface FeatureCard {
@@ -22,12 +22,6 @@ const features: FeatureCard[] = [
     description: '使用 AI 技术分离人声和伴奏',
     icon: MdAudioFile,
     path: '/remove-vocals'
-  },
-  {
-    title: '历史记录',
-    description: '查看系统访问记录',
-    icon: MdHistory,
-    path: '/history'
   }
 ];
 
