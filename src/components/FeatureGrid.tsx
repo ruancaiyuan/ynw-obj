@@ -19,7 +19,7 @@ const features: FeatureCard[] = [
   },
   {
     title: '汽水解歌',
-    description: '使用 AI 技术分离人声和伴奏',
+    description: '输入歌曲信息，自动解析并处理',
     icon: MdAudioFile,
     path: '/remove-vocals'
   }

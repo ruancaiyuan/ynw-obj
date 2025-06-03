@@ -150,14 +150,14 @@ export function RemoveVocalsPage() {
   return (
     <Container maxW='container.xl' py={8}>
       <VStack spacing={8} align='stretch'>
-        <Box textAlign='center'>
-          <Heading as='h1' size='xl' mb={4}>
-            汽水解歌
-          </Heading>
-          <Text fontSize='lg' color='gray.500'>
-            输入歌曲信息，自动解析并处理
-          </Text>
-        </Box>
+        {/*<Box textAlign='center'>*/}
+        {/*  <Heading as='h1' size='xl' mb={4}>*/}
+        {/*    汽水解歌*/}
+        {/*  </Heading>*/}
+        {/*  <Text fontSize='lg' color='gray.500'>*/}
+        {/*    输入歌曲信息，自动解析并处理*/}
+        {/*  </Text>*/}
+        {/*</Box>*/}
 
         <Box>
           <Input
