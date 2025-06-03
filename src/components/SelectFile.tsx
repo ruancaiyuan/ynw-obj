@@ -33,13 +33,7 @@ export function SelectFile() {
   };
 
   const handleDownloadOldVersion = () => {
-    // 创建一个下载链接
-    const link = document.createElement('a');
-    link.href = '/qqmusicOld/QQMusic_19.43.exe'; // 假设历史版本存放在这个路径
-    link.download = 'QQMusic_19.43.exe';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open('https://down.wsyhn.com/25_316608', '_blank');
   };
 
   return (
@@ -59,7 +53,7 @@ export function SelectFile() {
           </Text>
         </Text>
       </FileInput>
-      
+
       <HStack justify="center" mt={4}>
         <Button
           leftIcon={<DownloadIcon />}
