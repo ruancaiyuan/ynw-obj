@@ -1,7 +1,9 @@
-import { Box, SimpleGrid, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, SimpleGrid, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { MdMusicNote, MdAudioFile } from 'react-icons/md';
 import { Icon } from '@chakra-ui/react';
+import { toast } from '@chakra-ui/react';
+import { spawn } from 'child_process';
 
 interface FeatureCard {
   title: string;
@@ -27,8 +29,49 @@ const features: FeatureCard[] = [
 
 export function FeatureGrid() {
   const navigate = useNavigate();
+  const toast = useToast();
   const bgColor = useColorModeValue('white', 'gray.700');
   const hoverBgColor = useColorModeValue('gray.50', 'gray.600');
+
+  const handleDownload = async (format: 'mp3' | 'wav') => {
+    if (!songInfo?.playOnline) {
+      toast({
+        title: '错误',
+        description: '没有可下载的音频',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      const url = `http://192.168.1.17:3000/api/audio?url=${encodeURIComponent(songInfo.playOnline)}&download=true&format=${format}&songName=${encodeURIComponent(songInfo.songName)}&artistName=${encodeURIComponent(songInfo.artistName)}`;
+      
+      // 添加错误处理
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      // 检查Content-Type
+      const contentType = response.headers.get('content-type');
+      if (format === 'wav' && contentType !== 'audio/wav') {
+        throw new Error('服务器返回的格式不是WAV');
+      }
+      
+      window.open(url, '_blank');
+    } catch (error) {
+      console.error('下载错误:', error);
+      toast({
+        title: '下载失败',
+        description: error.message || '请稍后重试',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10} p={4}>

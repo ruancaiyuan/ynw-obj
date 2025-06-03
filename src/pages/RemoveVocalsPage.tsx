@@ -62,12 +62,38 @@ export function RemoveVocalsPage() {
 
     try {
       const url = `http://192.168.1.17:3000/api/audio?url=${encodeURIComponent(songInfo.playOnline)}&download=true&format=${format}&songName=${encodeURIComponent(songInfo.songName)}&artistName=${encodeURIComponent(songInfo.artistName)}`;
-      window.open(url, '_blank');
+
+      // 添加错误处理
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // 检查Content-Type
+      const contentType = response.headers.get('content-type');
+      if (format === 'wav' && contentType !== 'audio/wav') {
+        throw new Error('服务器返回的格式不是WAV');
+      }
+
+      // 创建Blob对象
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      // 创建下载链接
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `${songInfo.songName}-${songInfo.artistName}.${format}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // 清理Blob URL
+      URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error('下载错误:', error);
       toast({
         title: '下载失败',
-        description: '请稍后重试',
+        description: error.message || '请稍后重试',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -225,7 +251,7 @@ export function RemoveVocalsPage() {
                         />
                         <MenuList>
                           <MenuItem onClick={() => handleDownload('mp3')}>下载 MP3</MenuItem>
-                          <MenuItem onClick={() => handleDownload('wav')}>下载 WAV</MenuItem>
+                          {/*<MenuItem onClick={() => handleDownload('wav')}>下载 WAV</MenuItem>*/}
                         </MenuList>
                       </Menu>
                     </Flex>

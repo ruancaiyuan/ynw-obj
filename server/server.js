@@ -98,36 +98,7 @@ async function streamToBuffer(stream) {
   return Buffer.concat(chunks);
 }
 
-// 转换音频格式
-async function convertToWav(inputBuffer) {
-  return new Promise((resolve, reject) => {
-    const ffmpeg = spawn('ffmpeg', [
-      '-i', 'pipe:0',
-      '-acodec', 'pcm_s16le',
-      '-ar', '44100',
-      '-ac', '2',
-      '-f', 'wav',
-      'pipe:1'
-    ]);
-
-    const chunks = [];
-    ffmpeg.stdout.on('data', (chunk) => chunks.push(chunk));
-    ffmpeg.stdout.on('end', () => resolve(Buffer.concat(chunks)));
-    ffmpeg.stderr.on('data', (data) => console.log(`ffmpeg stderr: ${data}`));
-    ffmpeg.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error(`ffmpeg process exited with code ${code}`));
-      }
-    });
-
-    const inputStream = new Readable();
-    inputStream.push(inputBuffer);
-    inputStream.push(null);
-    inputStream.pipe(ffmpeg.stdin);
-  });
-}
-
-// 代理音频文件
+// 修改音频代理处理
 app.get('/api/audio', async (req, res) => {
   try {
     const url = req.query.url;
@@ -161,27 +132,6 @@ app.get('/api/audio', async (req, res) => {
 
     console.log('音频响应状态:', response.status);
     console.log('音频响应头:', response.headers);
-
-    // 如果是下载请求且需要 WAV 格式
-    if (req.query.download && req.query.format === 'wav') {
-      console.log('正在转换为 WAV 格式...');
-      const audioBuffer = await streamToBuffer(response.data);
-      const wavBuffer = await convertToWav(audioBuffer);
-
-      const fileName = `${songName}-${artistName}.wav`.replace(/[<>:"/\\|?*]/g, '_');
-
-      res.set({
-        'Content-Type': 'audio/wav',
-        'Content-Length': wavBuffer.length,
-        'Content-Disposition': `attachment; filename*=UTF-8''${encodeURIComponent(fileName)}`,
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Range, Content-Type'
-      });
-
-      res.send(wavBuffer);
-      return;
-    }
 
     // 设置响应头
     const headers = {

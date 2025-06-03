@@ -4,13 +4,12 @@ import { ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel, Icon, chakra }
 
 import { MainTab } from '~/tabs/MainTab';
 import { SettingsTab } from '~/tabs/SettingsTab';
+import { FaqTab } from '~/tabs/FaqTab';
 
 import { Provider } from 'react-redux';
 import { theme } from '~/theme';
 import { persistSettings } from '~/features/settings/persistSettings';
-import { setupStore } from '~/store';
-import { Footer } from '~/components/Footer';
-import { FaqTab } from '~/tabs/FaqTab';
+import { setupStore } from '~/store'; 
 
 // Private to this file only.
 const store = setupStore();
@@ -26,8 +25,7 @@ export function AppRoot() {
             <Tab>
               <Icon as={MdHome} mr="1" />
               <chakra.span>应用</chakra.span>
-            </Tab>
-
+            </Tab> 
           </TabList>
 
           <TabPanels overflow="auto" minW={0} flexDir="column" flex={1} display="flex">
