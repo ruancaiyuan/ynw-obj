@@ -61,7 +61,7 @@ export function RemoveVocalsPage() {
     }
 
     try {
-      const url = `http://127.0.0.1:3000/api/audio?url=${encodeURIComponent(songInfo.playOnline)}&download=true&format=${format}&songName=${encodeURIComponent(songInfo.songName)}&artistName=${encodeURIComponent(songInfo.artistName)}`;
+      const url = `http://192.168.1.13:3000/api/audio?url=${encodeURIComponent(songInfo.playOnline)}&download=true&format=${format}&songName=${encodeURIComponent(songInfo.songName)}&artistName=${encodeURIComponent(songInfo.artistName)}`;
       window.open(url, '_blank');
     } catch (error) {
       console.error('下载错误:', error);
@@ -95,7 +95,7 @@ export function RemoveVocalsPage() {
       const url = urlMatch[0];
       console.log('解析到的URL:', url);
 
-      const response = await axios.get('http://127.0.0.1:3000/api/qishui', {
+      const response = await axios.get('http://192.168.1.13:3000/api/qishui', {
         params: { url }
       });
 
@@ -244,7 +244,7 @@ export function RemoveVocalsPage() {
             <ModalBody pb={6}>
               <Box
                 as="iframe"
-                src={`http://127.0.0.1:3000/api/audio?url=${encodeURIComponent(songInfo?.playOnline || '')}`}
+                src={`http://192.168.1.13:3000/api/audio?url=${encodeURIComponent(songInfo?.playOnline || '')}`}
                 width="100%"
                 height="400px"
                 border="none"

@@ -56,14 +56,14 @@ async function saveCachedRequests() {
 async function cleanupExpiredRecords() {
   const now = Date.now();
   let deletedCount = 0;
-  
+
   for (const [key, data] of processedRequests.entries()) {
     if (now - data.timestamp > 24 * 60 * 60 * 1000) { // 24小时后过期
       processedRequests.delete(key);
       deletedCount++;
     }
   }
-  
+
   if (deletedCount > 0) {
     console.log(`已清理 ${deletedCount} 条过期记录`);
     await saveCachedRequests();
@@ -81,7 +81,7 @@ loadCachedRequests().catch(console.error);
 
 // 配置 CORS
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: ['http://localhost:5173', 'http://192.168.1.13:5173'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
   credentials: true
@@ -167,9 +167,9 @@ app.get('/api/audio', async (req, res) => {
       console.log('正在转换为 WAV 格式...');
       const audioBuffer = await streamToBuffer(response.data);
       const wavBuffer = await convertToWav(audioBuffer);
-      
+
       const fileName = `${songName}-${artistName}.wav`.replace(/[<>:"/\\|?*]/g, '_');
-      
+
       res.set({
         'Content-Type': 'audio/wav',
         'Content-Length': wavBuffer.length,
@@ -178,7 +178,7 @@ app.get('/api/audio', async (req, res) => {
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Range, Content-Type'
       });
-      
+
       res.send(wavBuffer);
       return;
     }
@@ -191,8 +191,8 @@ app.get('/api/audio', async (req, res) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Range, Content-Type',
-      'Content-Disposition': req.query.download ? 
-        `attachment; filename*=UTF-8''${encodeURIComponent(`${songName}-${artistName}.mp3`.replace(/[<>:"/\\|?*]/g, '_'))}` : 
+      'Content-Disposition': req.query.download ?
+        `attachment; filename*=UTF-8''${encodeURIComponent(`${songName}-${artistName}.mp3`.replace(/[<>:"/\\|?*]/g, '_'))}` :
         'inline',
       'Cache-Control': 'public, max-age=31536000'
     };
@@ -302,7 +302,7 @@ app.get('/api/qishui', async (req, res) => {
     console.log('获取到响应数据');
 
     const $ = cheerio.load(response.data);
-    
+
     let routerData = null;
     $('script').each((i, elem) => {
       const content = $(elem).html();
@@ -380,4 +380,4 @@ process.on('SIGTERM', async () => {
     console.log('服务器已关闭');
     process.exit(0);
   });
-}); 
+});
